@@ -50,7 +50,9 @@ var Player = function(x,y) {
 	self.init = function () {
 	}
 	
-	self.collided = function(newX, newY, w, h) { return false; }
+	self.collided = function(newX, newY) {
+		 return !(newX > 0 && newX < graphics.width - self.w && newY > 0 && newY < graphics.height - self.h);
+	}
 	
 	self.update = function(dt) {
 		self.dts = dt/1000;
@@ -58,7 +60,7 @@ var Player = function(x,y) {
 		self.parseKeys();	
 		
 		var candidatePos = self.updatedPos();
-		if (!self.collided(candidatePos.x,candidatePos.y,self.w,self.h)) {
+		if (!self.collided(candidatePos.x,candidatePos.y)) {
 			self.x = candidatePos.x;
 			self.y = candidatePos.y;
 		} else {
@@ -163,9 +165,7 @@ var Player = function(x,y) {
 			ctxt.drawImage(self.animationStrip,
 				self.animationControl.currentFrame()*self.w, 0, self.w, self.h, self.ix, self.iy, self.w, self.h);
 			graphics.mark(self.ix, self.iy, self.w, self.h);
-			
-			// commented by now until we use it in the game
-			//collisions.getShadowAtPoint(self.x,self.y);
+
 			
 			graphics.redraw();
 		}

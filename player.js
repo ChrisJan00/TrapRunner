@@ -51,7 +51,7 @@ var Player = function(x,y) {
 	}
 	
 	self.collided = function(newX, newY) {
-		 if (newX > 0 && newX < graphics.width - self.w && newY > 0 && newY < graphics.height - self.h)
+		 if (newX > 0 && newX < level.availableWidth - self.w && newY > 0 && newY < graphics.height - self.h)
 		 	return level.collided(newX, newY, self.w, self.h);
 		 return true;
 	}
@@ -155,7 +155,7 @@ var Player = function(x,y) {
 		self.dts = dt/1000;
 
 		var candidatePos = self.updatedPos(); 
-		self.ix = Math.round(candidatePos.x);
+		self.ix = Math.round(candidatePos.x - level.x1);
 		self.iy = Math.round(candidatePos.y);
 		
 		if ((self.ix>=0) && (self.ix+self.w<=graphics.width) && (self.iy>=0) && (self.iy+self.h<=graphics.height)) {

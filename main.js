@@ -11,7 +11,7 @@ function loaderProgress() {
 function prepareGame() {
 	graphics.init();
 	graphics.bgLayer = graphics.createLayer();
-	//graphics.shapesLayer = graphics.createLayer();
+	graphics.mapLayer = graphics.createLayer();
 	graphics.peopleLayer = graphics.createLayer();
 	//lightsManager.drawShapes();
 	//graphics.redraw();

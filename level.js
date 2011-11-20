@@ -39,8 +39,8 @@ var Level = function() {
 		// scroll
 		if (player.x - self.x1 > graphics.width/2) {
 			self.x1 = player.x - graphics.width/2;
-			if (self.x1 + graphics.width > self.cols * self.blockSide)
-				self.x1 = levelMap.length * self.blockSide - graphics.width;
+			if (self.x1 + graphics.width > self.availableWidth)
+				self.x1 = self.availableWidth - graphics.width;
 		}
 		if (player.x - self.x1 < graphics.width/4) {
 			self.x1 = player.x - graphics.width/4;
@@ -75,7 +75,14 @@ var Level = function() {
 		
 				var colCount = Math.ceil((self.x1 - self.x0) / self.blockSide);
 				var colOrigin = Math.floor((self.x0 + graphics.width) / self.blockSide);
-				var xExcess = (self.x0 + graphics.width) % self.blockSide;
+				var newColOrigin = Math.floor((self.x1 + graphics.width) / self.blockSide);
+				var extra = 0;
+				if ( newColOrigin != colOrigin ) {
+					//colCount++;
+					//colOrigin--;
+					extra = bs;
+				}
+				var xExcess = (self.x1 + graphics.width) % self.blockSide;
 				var jjlimit = Math.min(self.rows, graphics.height / bs);
 				for (var jj = 0; jj < jjlimit; jj++)
 					for (var ii = 0; ii < colCount; ii++) {
@@ -89,12 +96,19 @@ var Level = function() {
 				self.frameCtxt.drawImage(self.canvas, 0, 0, w, graphics.height, self.x0 - self.x1, 0, w, graphics.height);
 				var colCount = Math.ceil(Math.abs((self.x0 - self.x1) / self.blockSide));
 				var colOrigin = Math.floor(self.x0 / self.blockSide);
-				var xExcess = self.x0 % self.blockSide;
+				var newColOrigin = Math.floor((self.x1 + graphics.width) / self.blockSide);
+				var extra = 0;
+				if ( newColOrigin != colOrigin ) {
+					colCount++;
+					colOrigin--;
+					extra = -bs;
+				}
+				var xExcess = self.x1 % self.blockSide;
 				var jjlimit = Math.min(self.rows, graphics.height / bs);
 				for (var jj = 0; jj < jjlimit; jj++)
 					for (var ii = 0; ii < colCount; ii++) {
 						var a = levelMap[jj][ii + colOrigin];
-						var xdest = ii * bs - xExcess;
+						var xdest = extra + ii * bs - xExcess;
 						self.frameCtxt.drawImage(self.tiles, a*bs, 0, bs, bs,
 							xdest,jj*bs,bs,bs);
 					}

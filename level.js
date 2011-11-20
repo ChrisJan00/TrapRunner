@@ -3,17 +3,17 @@ var Level = function() {
 	self.tiles = new Image();
     self.tiles.src = "graphics/Tiles.png";
 	
-	self.blockSide = 16;
+	self.blockSide = 32;
 	
 	// fill up an image
 	self.init = function() {
 		self.canvas = document.createElement("canvas");
-		self.ctx = self.canvas.getContext("2d");
-		self.canvas.width = GLOBAL.canvasWidth;
-		self.canvas.height = GLOBAL.canvasHeight;
+		self.ctxt = self.canvas.getContext("2d");
+		self.canvas.width = graphics.width;
+		self.canvas.height = graphics.height;
 		
-		self.rows = GLOBAL.mainMap.length;
-		self.cols = GLOBAL.mainMap[0].length;
+		self.rows = levelMap.length;
+		self.cols = levelMap[0].length;
 		
 		//self.draw(0);
 	}
@@ -26,15 +26,20 @@ var Level = function() {
 	self.draw = function(dt) {
 		// nothing to do because we are using the game background
 		var bs = self.blockSide;
-		for (var jj=0;jj<GLOBAL.mainMap.length;jj++)
-			for (var ii=0;ii<GLOBAL.mainMap[jj].length;ii++) {
-				var a = GLOBAL.mainMap[jj][ii];
-				self.ctx.drawImage(self.tiles, a*bs, 0, bs, bs,
+		for (var jj=0;jj<levelMap.length;jj++)
+			for (var ii=0;ii<levelMap[jj].length;ii++) {
+				var a = levelMap[jj][ii];
+				// remove this
+				if (jj*bs > graphics.width) continue;
+				self.ctxt.drawImage(self.tiles, a*bs, 0, bs, bs,
 					ii*bs,jj*bs,bs,bs);
 			}
-			
-		GLOBAL.bgContext.drawImage(self.canvas, 0, 0, GLOBAL.canvasWidth, GLOBAL.canvasHeight);
-		GLOBAL.gameContext.drawImage(self.canvas, 0, 0, GLOBAL.canvasWidth, GLOBAL.canvasHeight);
+		
+		var gCtxt = graphics.getContext(graphics.bgLayer);
+		gCtxt.drawImage(self.canvas, 0, 0, graphics.width, graphics.height);
+		gCtxt.drawImage(self.canvas, 0, 0, graphics.width, graphics.height);
+		graphics.mark(0,0, graphics.width, graphics.height);
+		graphics.redraw();
 	}
 	
 	self.collided = function( x,y,w,h ) {
@@ -47,7 +52,7 @@ var Level = function() {
 		
 		for (var jj=sY1; jj<=sY2; jj++)
 			for (var ii=sX1; ii<=sX2; ii++)
-				if ( GLOBAL.mainMap[jj][ii] > 0 )
+				if ( levelMap[jj][ii] > 0 )
 					return true;
 		
 		return false;

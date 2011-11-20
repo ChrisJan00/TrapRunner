@@ -51,7 +51,9 @@ var Player = function(x,y) {
 	}
 	
 	self.collided = function(newX, newY) {
-		 return !(newX > 0 && newX < graphics.width - self.w && newY > 0 && newY < graphics.height - self.h);
+		 if (newX > 0 && newX < graphics.width - self.w && newY > 0 && newY < graphics.height - self.h)
+		 	return level.collided(newX, newY, self.w, self.h);
+		 return true;
 	}
 	
 	self.update = function(dt) {
